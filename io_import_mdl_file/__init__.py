@@ -4,7 +4,7 @@ bl_info = {
     "blender":      (2,8,2),
     "version":      (0,0,1),
     "location":     "File > Import-Export",
-    "description":  "Export MDL file formats",
+    "description":  "Import MDL file formats",
     "category":     "Import-Export"
 }
         
@@ -12,18 +12,18 @@ import bpy
 from bpy_extras.io_utils import ExportHelper
 
 class ExportMyFormat(bpy.types.Operator, ExportHelper):
-    bl_idname       = "mdl_export_format.mdl";
+    bl_idname       = "mdl_export_format.blender";
     bl_label        = "My MDL Data Exporter";
     bl_options      = {'PRESET'};
     
-    filename_ext    = ".mdl";
+    filename_ext    = ".blender";
     
     def execute(self, context):
-        print "Hello World"
-        return {'Finished'};
+        print ("Hello World\n")
+        return {'FINISHED'};
 
 def menu_func(self, context):
-    self.layout.operator(ExportMyFormat.bl_idname, text="FrostTree MDL Exporter Format(.mdl)");
+    self.layout.operator(ExportMyFormat.bl_idname, text="FrostTree MDL Formal(.mdl)");
 
 def register():
     bpy.utils.register_module(__name__);
