@@ -1,0 +1,6 @@
+The Quake MDL files we found were acquired from canbpubs from the QuakeOne forums. We have been using these as boostrap to save time.
+
+The models can be downloaded from here:
+http://quakeone.com/forums/quake-mod-releases/works-progress/9573-authentic-model-improvement.html
+
+
