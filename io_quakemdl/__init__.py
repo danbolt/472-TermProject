@@ -7,16 +7,18 @@ bl_info = {
     "description":  "Export MDL file formats",
     "category":     "Import-Export"
 }
-        
+
 import bpy
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from bpy.props import StringProperty
+
+from io_quakemdl import mdl
 
 class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     """Load a Quake MDL file"""
     bl_idname       = "import_mesh.quake_mdl_v6"
     bl_label        = "FrostTree MDL Import"
-    bl_options      = {'PRESENT'}
+    bl_options      = {'PRESET'}
 
     filename_ext = ".mdl"
     def execute(self, context):
