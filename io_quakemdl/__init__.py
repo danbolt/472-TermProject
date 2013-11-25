@@ -9,49 +9,45 @@ bl_info = {
 }
         
 import bpy
-from bpy_extras.io_utils import ExportHelper
+from bpy_extras.io_utils import ExportHelper, ImportHelper
 from bpy.props import StringProperty
 
-class ImportMDLFormat(bpy.types.Operator, ExportHelper)
-    bl_idname       = "mdl_import_format.blender";
-    bl_label        = "My MDL Data Importer";
-    bl_options      = {'PRESENT'};
+class ImportMDLFormat(bpy.types.Operator, ImportHelper):
+    """Load a Quake MDL file"""
+    bl_idname       = "import_mesh.quake_mdl_v6"
+    bl_label        = "FrostTree MDL Import"
+    bl_options      = {'PRESENT'}
 
-    filename_ext = ".mdl";
-
-
+    filename_ext = ".mdl"
     def execute(self, context):
-
-        print ("Hello World!")
-        return {'FINISHED'};
+        print ("Hello World Import!")
+        return {'FINISHED'}
 
 class ExportMDLFormat(bpy.types.Operator, ExportHelper):
-    bl_idname       = "mdl_export_format.mdl";
-    bl_label        = "My MDL Data Exporter";
-    bl_options      = {'PRESET'};
+    bl_idname       = "import_mesh.quake_mdl_v6"
+    bl_label        = "FrostTree MDL Export"
+    bl_options      = {'PRESET'}
     
-    filename_ext    = ".mdl";
-    filter_name     = StringProperty(default = "*.mdl", options = {'HIDDEN'})
-
+    filename_ext    = ".mdl"
     def execute(self, context):
-        print ("Hello World\n")
-        return {'FINISHED'};
+        print ("Hello World Export")
+        return {'FINISHED'}
 
 def menu_func_import(self, context):
-    self.layout.operator(ImportMDLFormat.bl_idname, text = "FrostTree MDL Import Format(.mdl)");
+    self.layout.operator(ImportMDLFormat.bl_idname, text = "FrostTree MDL Import Format(.mdl)")
 
 def menu_func_export(self, context):
-    self.layout.operator(ExportMDLFormat.bl_idname, text="FrostTree MDL Export Format(.mdl)");
+    self.layout.operator(ExportMDLFormat.bl_idname, text="FrostTree MDL Export Format(.mdl)")
 
 def register():
-    bpy.utils.register_module(__name__);
+    bpy.utils.register_module(__name__)
 
-    bpy.types.INFO_MT_file_import.append(menu_func_import);
-    bpy.types.INFO_MT_file_export.append(menu_func_export);
+    bpy.types.INFO_MT_file_import.append(menu_func_import)
+    bpy.types.INFO_MT_file_export.append(menu_func_export)
     
 def unregister():
-    bpy.utils.unregister_module(__name__);
-    bpy.types.INFO_MT_file_export.remove(menu_func);
+    bpy.utils.unregister_module(__name__)
+    bpy.types.INFO_MT_file_export.remove(menu_func)
 
 if __name__ == "__main__":
     register()
