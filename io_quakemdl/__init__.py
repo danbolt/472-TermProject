@@ -9,6 +9,7 @@ bl_info = {
 }
         
 import bpy
+from . import import_mdl
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from bpy.props import StringProperty
 
@@ -19,7 +20,11 @@ class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     bl_options      = {'PRESENT'}
 
     filename_ext = ".mdl"
+    filter_glob = StringProperty(default="*.mdl", options={'HIDDEN'})
+
     def execute(self, context):
+        filter_glob = StringProperty(default="*.mdl", options={'HIDDEN'})
+        return import_mdl.import_mdl(self, context, **keywords)
         print ("Hello World Import!")
         return {'FINISHED'}
 
