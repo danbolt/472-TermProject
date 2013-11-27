@@ -8,16 +8,11 @@ bl_info = {
     "category":     "Import-Export"
 }
 
-if "bpy" in locals():
-    import imp
-    if "import_mdl" in locals():
-        imp.reload(import_mdl)
-    if "export_mdl" in locals():
-        imp.reload(export_mdl)
-
 import bpy
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from bpy.props import StringProperty
+
+from io_quakemdl import mdl
 
 class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     """Load a Quake MDL file"""
