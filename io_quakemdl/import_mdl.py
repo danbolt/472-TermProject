@@ -9,9 +9,11 @@ def import_mdl(operator, context, filepath):
 
 	# deactivate objects in the scene
 	#for obj in bpy.types.scene.objects:
-		#obj = False
+	#	obj = False
 
 	#mdl = MDL();
+
+	print("inside the import_mdl")
 	operator.report({'ERROR'}, "Inside import_mdl")
 	return {'CANCEL'}
 	#if not read_mdl(filename):
