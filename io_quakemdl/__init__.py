@@ -7,7 +7,7 @@ bl_info = {
     "description":  "Export MDL file formats",
     "category":     "Import-Export"
 }
-        
+
 import bpy
 from . import import_mdl
 from bpy_extras.io_utils import ExportHelper, ImportHelper
@@ -23,6 +23,7 @@ class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     filter_glob = StringProperty(default="*.mdl", options={'HIDDEN'})
 
     def execute(self, context):
+        #import import_mdl
         filter_glob = StringProperty(default="*.mdl", options={'HIDDEN'})
         return import_mdl.import_mdl(self, context, **keywords)
         print ("Hello World Import!")
