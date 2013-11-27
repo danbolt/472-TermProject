@@ -1,4 +1,5 @@
 import bpy
+from .mdl import MDL
 
 def printstatement():
 	print("test works")
