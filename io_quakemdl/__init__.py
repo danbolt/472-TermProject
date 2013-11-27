@@ -8,15 +8,20 @@ bl_info = {
     "category":     "Import-Export"
 }
 
+if "bpy" in locals():
+    import imp
+    if "import_mdl" in locals():
+        imp.reload(import_mdl)
+    if "export_mdl" in locals():
+        imp.reload(export_mdl)
+
 import bpy
-from io_quakemdl import import_mdl
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from bpy.props import StringProperty
 
 class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     """Load a Quake MDL file"""
 
-    print('inside ImportMDLFormat')
     bl_idname       = "import_mesh.quake_mdl_v6"
     bl_label        = "FrostTree MDL Import"
 
@@ -24,6 +29,7 @@ class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     filter_glob = StringProperty(default="*.mdl", options={'HIDDEN'})
 
     def execute(self, context):
+        from . import import_mdl
         print ('inside ImportMDLFormat.execute')
         keywords = self.as_keywords (ignore=("filter_glob",))
         print('inside ImportMDLFormat exiting')
@@ -39,7 +45,6 @@ class ExportMDLFormat(bpy.types.Operator, ExportHelper):
         return {'FINISHED'}
 
 def menu_func_import(self, context):
-    print ('inside menu_func_import')
     self.layout.operator(ImportMDLFormat.bl_idname, text = "FrostTree MDL Import Format(.mdl)")
 
 def menu_func_export(self, context):

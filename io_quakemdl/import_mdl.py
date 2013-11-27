@@ -1,6 +1,7 @@
-import re
 import bpy
-import mdl
+
+def printstatement():
+	print("test works")
 
 def import_mdl(operator, context, filepath):
 
@@ -14,8 +15,8 @@ def import_mdl(operator, context, filepath):
 	#mdl = MDL();
 
 	print("inside the import_mdl")
-	operator.report({'ERROR'}, "Inside import_mdl")
-	return {'CANCEL'}
+	#operator.report({'ERROR'}, "Inside import_mdl")
+	return {'FINISHED'}
 	#if not read_mdl(filename):
 		
 
