@@ -2,6 +2,14 @@ import bpy
 from .mdl import MDL
 from struct import pack, unpack
 
+def extract_char(mdl_file, count = 1):
+	data = mdl_file.read(count)
+	data = unpack("<%dB" count, data)
+
+	if count == 1:
+		return data[0]
+	return data
+
 def extract_float(mdl_file, count = 1):
 	data = mdl_file.read(4*count)
 	data = unpack("<%df" % count, data)
@@ -35,8 +43,34 @@ def extract_skin_texture(mdl, mdl_file):
 	if group == 0:
 		data = extract_skin_data(mdl_file, size)
 		return (group, data)
+	elif group == 1:
+		num_of_pics = extract_int(mdl_file)
+		time = extract_float(mdl_file, num_of_pics)
+		print("time: " + str(time))
+		data = []
+		for x in range(0, num_of_pics):
+			data.append(extract_skin_data(mdl_file, size))
+
+		return(group, num_of_pics, time, data)
 	else:
-		return (1, 0)
+		# error check but return value is still valid, need to change
+		operator.report({'ERROR'}, "skin group not a valid number")
+		return -1;
+
+def extract_triangles(mdl_file):
+	facefront = extract_int(mdl_file)
+	vertex = extract_int(mdl_file, 3)
+	return (facefront, vertex)
+
+def extract_vertex(mdl_file):
+	vertex_coordinate = extract_char(mdl_file, 3)
+
+def extract_frames(mdl, mdl_file):
+	type = extract_int(mdl_file)
+
+	# type is 0 then model frame, else group of simple frames
+	if type == 0:
+		min_bound = extract_vertex(mdl_file)
 
 def read_file(mdl, filename):
 	mdl_file = open(filename, 'rb')
@@ -88,10 +122,30 @@ def read_file(mdl, filename):
 	print("size: " + str(size))
 	##############################################################################
 
+	#extracts the number of textures in mdl
 	for x in range(0, num_skins):
 		mdl.skins.append(extract_skin_texture(mdl, mdl_file))
 
-	print("mdl.skins: " + str(mdl.skins))
+	#check to see if texture is invalid
+	if mdl.skins[0] == -1:
+		return False
+	#print("mdl.skins: " + str(mdl.skins))
+
+	#extracts texture coordinates from mdl
+	texture_coordinates = []
+	for x in range(0, num_verts):
+		texture_coordinates.append(extract_int(mdl_file, 3))
+
+	print("texture_coordinates: " + str(texture_coordinates))
+	
+	#extracts triangles from mdl
+	for x in range(0, num_tris):
+		mdl.triangles.append(extract_triangles(mdl_file))
+	#print("triangles: " + str(mdl.triangles))
+
+	#extracting frames
+	for x in range(0, num_frames):
+		mdl.frames.append(extract_frames(mdl, mdl_file))
 
 	return True
 
