@@ -100,7 +100,12 @@ def extract_frames(mdl, mdl_file, num_verts):
 		max_bound = extract_bounds(mdl_file)
 		name = extract_char(mdl_file, 16)
 		vertices = extract_vertices(mdl, mdl_file, num_verts)
-		return mdl.SimpleFrame(min_bound, max_bound, name, vertices)
+		s = mdl.SimpleFrame()
+		s.box_min = min_bound
+		s.box_max = max_bound
+		s.name = name
+		s.vertices = vertices
+		return s
 	elif type == 1:
 		num = extract_int(mdl_file)
 		min_bound = extract_bounds(mdl_file)

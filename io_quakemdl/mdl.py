@@ -57,16 +57,10 @@ class MDL:
 
 	class SimpleFrame:
 		def __init__(self):
-			self.box_min = Vertex(0, 0, 0 ,0)
-			self.box_max = Vertex(0, 0, 0 ,0)
+			self.box_min = None #this should be a Vertex()
+			self.box_max = None 
 			self.name = ""
 			self.vertices = []
-
-		def __init__(self, box_min, box_max, name, vertices):
-			self.box_min = box_min
-			self.box_max = box_max
-			self.name = name
-			self.vertices = vertices
 
 	class Frames:
 		"""A set of frames for animation purposes"""
@@ -102,6 +96,7 @@ class MDL:
 		self.skinHeight = 0;
 		self.triangles = []
 		self.frames = []
+		self.texCoords = []
 
 
 
