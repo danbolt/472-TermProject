@@ -25,9 +25,7 @@ class ImportMDLFormat(bpy.types.Operator, ImportHelper):
 
     def execute(self, context):
         from . import import_mdl
-        print ('inside ImportMDLFormat.execute')
         keywords = self.as_keywords (ignore=("filter_glob",))
-        print('inside ImportMDLFormat exiting')
         return import_mdl.import_mdl(self, context, **keywords)
 
 class ExportMDLFormat(bpy.types.Operator, ExportHelper):
