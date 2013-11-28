@@ -12,7 +12,7 @@ import bpy
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from bpy.props import StringProperty
 
-from io_quakemdl import mdl2Mesh
+#from io_quakemdl import mdl2Mesh
 
 class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     """Load a Quake MDL file"""

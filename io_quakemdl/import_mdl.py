@@ -1,5 +1,6 @@
 import bpy
 from .mdl import MDL
+from io_quakemdl import mdl2Mesh
 from struct import pack, unpack
 
 def extract_char(mdl_file, count = 1):
@@ -210,5 +211,7 @@ def import_mdl(operator, context, filepath):
 	if not read_file(mdl, filepath):
 		operator.report({'ERROR'}, "File is not of mdl type")
 		return {'CANCELLED'}
+
+	mdl2Mesh.convertMDLToMesh(mdl)
 	
 	return {'FINISHED'}
