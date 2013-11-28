@@ -51,11 +51,15 @@ def generateTestMDL():
 def convertMDLToMesh(mdl):
 	mesh = bpy.data.meshes.new(name="MDL mesh")
 	coords = []
+	trigs = []
 
 	for vertex in mdl.frames[0].vertices:
 		coords.append([vertex.x, vertex.y, vertex.z])
 
-	mesh.from_pydata(coords, [], [])
+	for face in mdl.triangles:
+		trigs.append((face.a, face.b, face.c))
+
+	mesh.from_pydata(coords, [], trigs)
 	obj = bpy.data.objects.new("mdlName", mesh)
 	bpy.context.scene.objects.link(obj)
 	bpy.context.scene.objects.active = obj
