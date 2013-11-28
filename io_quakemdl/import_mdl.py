@@ -114,7 +114,7 @@ def extract_frames(mdl, mdl_file, num_verts):
 		time = extract_float(mdl_file, num)
 		frames = []
 		for i in range(0, num):
-			frames.append(mdl, mdl_file, num_verts)
+			frames.append(extract_frames(mdl, mdl_file, num_verts))
 		return mdl.Frames(frames, time)
 
 def read_file(mdl, filename):
