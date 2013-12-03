@@ -12,7 +12,7 @@ import bpy
 from bpy_extras.io_utils import ExportHelper, ImportHelper
 from bpy.props import StringProperty
 
-from io_quakemdl import mdl
+#from io_quakemdl import mdl2Mesh
 
 class ImportMDLFormat(bpy.types.Operator, ImportHelper):
     """Load a Quake MDL file"""
@@ -27,9 +27,10 @@ class ImportMDLFormat(bpy.types.Operator, ImportHelper):
         from . import import_mdl
         keywords = self.as_keywords (ignore=("filter_glob",))
         return import_mdl.import_mdl(self, context, **keywords)
+    
 
 class ExportMDLFormat(bpy.types.Operator, ExportHelper):
-    bl_idname       = "emport_mesh.quake_mdl_v6"
+    bl_idname       = "export_mesh.quake_mdl_v6"
     bl_label        = "FrostTree MDL Export"
     
     filename_ext    = ".mdl"

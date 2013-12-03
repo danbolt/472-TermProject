@@ -1,5 +1,6 @@
 import bpy
 from .mdl import MDL
+from io_quakemdl import mdl2Mesh
 from struct import pack, unpack
 
 def extract_char(mdl_file, count = 1):
@@ -46,7 +47,7 @@ def extract_ident(mdl_file):
 	return s
 
 def extract_skin_data(mdl_file, size = 1):
-	return mdl_file.read(size)
+	return [mdl_file.read(size)]
 
 def extract_skin_texture(mdl, mdl_file):
 	group = extract_int(mdl_file)
@@ -100,7 +101,12 @@ def extract_frames(mdl, mdl_file, num_verts):
 		max_bound = extract_bounds(mdl_file)
 		name = extract_char(mdl_file, 16)
 		vertices = extract_vertices(mdl, mdl_file, num_verts)
-		return mdl.SimpleFrame(min_bound, max_bound, name, vertices)
+		s = mdl.SimpleFrame()
+		s.box_min = min_bound
+		s.box_max = max_bound
+		s.name = name
+		s.vertices = vertices
+		return s
 	elif type == 1:
 		num = extract_int(mdl_file)
 		min_bound = extract_bounds(mdl_file)
@@ -176,6 +182,7 @@ def read_file(mdl, filename):
 	texture_coordinates = []
 	for x in range(0, num_verts):
 		texture_coordinates.append(extract_text_coord(mdl, mdl_file))
+		mdl.texCoords = texture_coordinates
 
 	#print("texture_coordinates: " + str(texture_coordinates))
 	
@@ -205,5 +212,7 @@ def import_mdl(operator, context, filepath):
 	if not read_file(mdl, filepath):
 		operator.report({'ERROR'}, "File is not of mdl type")
 		return {'CANCELLED'}
+
+	mdl2Mesh.convertMDLToMesh(mdl)
 	
 	return {'FINISHED'}
