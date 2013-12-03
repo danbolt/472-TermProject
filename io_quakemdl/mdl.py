@@ -97,6 +97,7 @@ class MDL:
 		self.triangles = []
 		self.frames = []
 		self.texCoords = []
+		self.images = []
 
 
 

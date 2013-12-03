@@ -47,7 +47,7 @@ def extract_ident(mdl_file):
 	return s
 
 def extract_skin_data(mdl_file, size = 1):
-	return mdl_file.read(size)
+	return [mdl_file.read(size)]
 
 def extract_skin_texture(mdl, mdl_file):
 	group = extract_int(mdl_file)
@@ -182,6 +182,7 @@ def read_file(mdl, filename):
 	texture_coordinates = []
 	for x in range(0, num_verts):
 		texture_coordinates.append(extract_text_coord(mdl, mdl_file))
+		mdl.texCoords = texture_coordinates
 
 	#print("texture_coordinates: " + str(texture_coordinates))
 	
