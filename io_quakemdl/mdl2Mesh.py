@@ -70,26 +70,32 @@ def convertMDLToMesh(mdl):
 		for i, skin in enumerate(mdl.skins):
 			if (skin.group()):
 				for j, subskin in enumerate(skin.frameData):
-					print("%s%d-%d" % ("skin", i, j))
 					parseAddTexture(mdl, subskin, "%s%d-%d" % ("skin", i, j))
 			else:
-				print("%s%d" % ("skin", i))
 				parseAddTexture(mdl, skin.frameData[0], "%s%d" % ("skin", i))
 
 	def rigTextures(mdl, mesh):
 		img = mdl.images[0]
 		uvlay = mesh.uv_textures.new("mdl texture")
-		uvloop = mesh.uv_layers[0]
-		for i, texpoly in enumerate(uvlay.data):
-			poly = mesh.polygons[i]
-			mdl_uvA = (mdl.texCoords[poly.vertices[0]].s, mdl.texCoords[poly.vertices[0]].t)
-			mdl_uvB = (mdl.texCoords[poly.vertices[1]].s, mdl.texCoords[poly.vertices[1]].t)
-			mdl_uvC = (mdl.texCoords[poly.vertices[2]].s, mdl.texCoords[poly.vertices[2]].t)
-			print("%d, %d" % (mdl_uvA[0], mdl_uvA[1]))
-			print("%d, %d" % (mdl_uvB[0], mdl_uvB[1]))
-			print("%d, %d" % (mdl_uvC[0], mdl_uvC[1]))
-			print("---")
-			#print(uvlay.data[i].uv)
+		uv_layer = mesh.uv_layers[0].data
+
+		for poly in mesh.polygons:
+			for loop_index in range(poly.loop_start, poly.loop_start + poly.loop_total):
+				uv_layer[loop_index].uv = (mdl.texCoords[mesh.loops[loop_index].vertex_index].t * 1.0 / mdl.skinWidth, 1 - mdl.texCoords[mesh.loops[loop_index].vertex_index].s * 1.0 / mdl.skinHeight)
+
+		mat = bpy.data.materials.new("mdl material")
+		mat.diffuse_color = (1,1,1)
+		mat.use_raytrace = False
+		tex = bpy.data.textures.new("skin", 'IMAGE')
+		tex.extension = 'CLIP'
+		tex.use_preview_alpha = True
+		tex.image = img
+		mat.texture_slots.add()
+		ts = mat.texture_slots[0]
+		ts.texture = tex
+		ts.use_map_alpha = True
+		ts.texture_coords = 'UV'
+		mesh.materials.append(mat)
 
 	mesh = bpy.data.meshes.new(name="MDL mesh")
 	coords = []
@@ -111,7 +117,10 @@ def convertMDLToMesh(mdl):
 	bpy.context.scene.objects.active = obj
 	mesh.update()
 
-	return None
+	bpy.ops.object.mode_set(mode='EDIT')
+	bpy.ops.mesh.select_all(action='SELECT')
+	bpy.ops.mesh.normals_make_consistent(inside=False)
+	bpy.ops.object.editmode_toggle()
 
 if __name__ == "__main__":
 	generateTestMDL()
