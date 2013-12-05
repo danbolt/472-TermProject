@@ -129,44 +129,26 @@ def read_file(mdl, filename):
 	
 	scale = extract_float(mdl_file, 3)
 	mdl.scale = mdl.Vec3(scale[0], scale[1], scale[2])
-
+	
 	translation = extract_float(mdl_file, 3)
 	mdl.translation = mdl.Vec3(translation[0], translation[1], translation[2])
-	#print ("translation: " + str(mdl.translation))
 	
 	mdl.boundingradius = extract_float(mdl_file)
-	#print("boundingradius: " + str(mdl.boundingradius))
 
 	eyePosition = extract_float(mdl_file, 3)
 	mdl.eyePosition = mdl.Vec3(eyePosition[0], eyePosition[1], eyePosition[2])
-	#print("eyePosition: " + str(mdl.eyePosition))
 
 	num_skins = extract_int(mdl_file)
-	#print("number of skins: " + str(num_skins))
-
 	mdl.skinWidth = extract_int(mdl_file)
-	#print("skin width: " + str(mdl.skinWidth))
-
 	mdl.skinHeight = extract_int(mdl_file)
-	#print("skin height: " + str(mdl.skinHeight))
 
 	num_verts = extract_int(mdl_file)
-	#print("number of vertices: " + str(num_verts))
-
 	num_tris = extract_int(mdl_file)
-	#print("number of triangles: " + str(num_tris))
-
 	num_frames = extract_int(mdl_file)
-	#print("number of frames: " + str(num_frames))
 
 	sync_type = extract_int(mdl_file)
-	#print("sync_type: " + str(sync_type))
-
 	flags = extract_int(mdl_file)
-	#print("flags: " + str(flags))
-
 	size = extract_float(mdl_file)
-	#print("size: " + str(size))
 	##############################################################################
 
 	#extracts the number of textures in mdl
@@ -176,26 +158,20 @@ def read_file(mdl, filename):
 	#check to see if texture is invalid
 	if mdl.skins[0] == -1:
 		return False
-	#print("mdl.skins: " + str(mdl.skins))
 
 	#extracts texture coordinates from mdl
 	texture_coordinates = []
 	for x in range(0, num_verts):
 		texture_coordinates.append(extract_text_coord(mdl, mdl_file))
 		mdl.texCoords = texture_coordinates
-
-	#print("texture_coordinates: " + str(texture_coordinates))
 	
 	#extracts triangles from mdl
 	for x in range(0, num_tris):
 		mdl.triangles.append(extract_triangles(mdl, mdl_file))
-	#print("triangles: " + str(mdl.triangles))
 
 	#extracting frames
 	for x in range(0, num_frames):
-		mdl.frames.append(extract_frames(mdl, mdl_file, num_verts))
-	#print("mdl.frames[0].box_min: "+ str(mdl.frames[0].box_min))
-
+		mdl.frames.append(extract_frames(mdl, mdl_file, num_verts)
 	return True
 
 def import_mdl(operator, context, filepath):
@@ -203,16 +179,14 @@ def import_mdl(operator, context, filepath):
 	# keeps a copy of the file in memory
 	bpy.context.user_preferences.edit.use_global_undo = False
 
-	# deactivate objects in the scene
-	#for obj in bpy.types.scene.objects:
-		#obj = False
-
 	mdl = MDL();
 
 	if not read_file(mdl, filepath):
 		operator.report({'ERROR'}, "File is not of mdl type")
 		return {'CANCELLED'}
 
+	if len(mdl.frames) > 1 or mdl.frames[0].type:
+		mdl2Mesh.buildShapeKeySet(mdl)
 	mdl2Mesh.convertMDLToMesh(mdl)
 	
 	return {'FINISHED'}

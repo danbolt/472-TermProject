@@ -2,6 +2,7 @@ import bpy
 
 from io_quakemdl import mdl
 from .quakepal import palette
+from mathutils import Vector, Matrix
 
 def generateTestMDL():
 	test = mdl.MDL()
@@ -48,6 +49,49 @@ def generateTestMDL():
 	test.frames.append(fr)
 
 	return test
+
+def makeShapeKey(mdl,i, shape_key, obj, j = 0):
+	frame = mdl.frames[i]
+
+	name = "mdlshapekey_%d" % (i)
+
+	#more than one complex frame
+	if frame is mdl.Frames:
+		frame = frame.frames[j]
+		name = "mdlshapekey_%d_%d" (i, j)
+	
+	#if the frame has a name then make the shape key have the same name else use the shapekey name for the frame name
+	if frame.name:
+		name = frame.name
+	else:
+		frame.name = name
+
+	key = obj.shape_key_add(name)
+	key.value = 0.0
+
+	shape_key.append(key)
+	m = Matrix(((	mdl.scale.x, 	0, 	0, 	mdl.translation.x),
+				(	0, 	mdl.scale.y,  	0, 	mdl.translation.y),
+				(	0, 		0, 	mdl.scale.z, mdl.translation.z),
+				(	0, 	0, 	0, 	1)))
+
+def buildShapeKeySet(mdl):
+	shape_keys = []
+	mesh = bpy.data.meshes.new("mdlShapeKey")
+	obj = bpy.data.objects.new("newMDLShapeKey", mesh)
+	obj.shape_key_add("Basis")
+	#current active shape key index
+	obj.active_shape_key_index = 0
+
+	mesh.shape_keys.name = "mdlShapeKey"
+
+	for i, frame in enumerate(mdl.frames):
+		frame = mdl.frames[i]
+		if frame is mdl.Frames:
+			for j in range(len(frame.frames)):
+				makeShapeKey(mdl, i, shape_keys, obj, j)
+		else:
+			makeShapeKey(mdl, i, shape_keys, obj)
 
 def convertMDLToMesh(mdl):
 	def loadTextures(mdl):
