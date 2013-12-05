@@ -171,7 +171,7 @@ def read_file(mdl, filename):
 
 	#extracting frames
 	for x in range(0, num_frames):
-		mdl.frames.append(extract_frames(mdl, mdl_file, num_verts)
+		mdl.frames.append(extract_frames(mdl, mdl_file, num_verts))
 	return True
 
 def import_mdl(operator, context, filepath):
